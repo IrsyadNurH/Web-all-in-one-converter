@@ -161,6 +161,17 @@ button[id^="convert"]:hover:enabled {
     margin-bottom: 15px;
 }
 
+
+.quality-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quality-control label {
+    font-weight: bold;
+}
+
 video, img, audio { /* Menargetkan elemen media */
     width: 100%;
     max-width: 400px;

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // URL backend yang akan di-deploy di Render
-    // GANTI DENGAN URL ANDA SENDIRI DI LANGKAH TERAKHIR
-const backendUrl = 'https://web-all-in-one-converter.vercel.app';
+    // Pastikan URL ini sudah benar menunjuk ke backend Render Anda
+    const backendUrl = 'https://web-all-in-one-converter.vercel.app'; // Ganti xxxx dengan ID Render Anda
+
     const tabButtons = document.querySelectorAll('.tab-button');
     const converterSections = document.querySelectorAll('.converter-section');
 
@@ -16,7 +16,7 @@ const backendUrl = 'https://web-all-in-one-converter.vercel.app';
         button.addEventListener('click', () => switchTab(button.dataset.tab));
     });
 
-    // Generic setup function for each converter type
+    // Fungsi setup yang telah diperbarui untuk semua konverter
     function setupConverter(type) {
         const input = document.getElementById(`${type}Input`);
         const fileName = document.getElementById(`${type}FileName`);
@@ -28,6 +28,36 @@ const backendUrl = 'https://web-all-in-one-converter.vercel.app';
         const downloadLink = document.getElementById(`download${type.charAt(0).toUpperCase() + type.slice(1)}Link`);
         
         let selectedFile = null;
+
+        // --- BAGIAN BARU: Logika spesifik untuk quality slider gambar ---
+        if (type === 'image') {
+            const qualityControl = document.getElementById('imageQualityControl');
+            const qualitySlider = document.getElementById('imageQuality');
+            const qualityValue = document.getElementById('imageQualityValue');
+
+            // Fungsi untuk menampilkan/menyembunyikan slider
+            const toggleQualityControl = () => {
+                const format = outputFormat.value;
+                if (format === 'jpeg' || format === 'webp') {
+                    qualityControl.style.display = 'flex';
+                } else {
+                    qualityControl.style.display = 'none';
+                }
+            };
+            
+            // Tambahkan event listener untuk select format
+            outputFormat.addEventListener('change', toggleQualityControl);
+            
+            // Tambahkan event listener untuk slider
+            qualitySlider.addEventListener('input', () => {
+                qualityValue.textContent = `${qualitySlider.value}%`;
+            });
+
+            // Panggil sekali saat inisialisasi untuk mengatur tampilan awal
+            toggleQualityControl();
+        }
+        // --- AKHIR BAGIAN BARU ---
+
 
         input.addEventListener('change', (event) => {
             selectedFile = event.target.files.length > 0 ? event.target.files[0] : null;
@@ -54,6 +84,13 @@ const backendUrl = 'https://web-all-in-one-converter.vercel.app';
             formData.append(type, selectedFile);
             formData.append('outputFormat', outputFormat.value);
 
+            // --- BARIS BARU: Menambahkan data kualitas ke FormData jika tipenya gambar ---
+            if (type === 'image') {
+                const qualitySlider = document.getElementById('imageQuality');
+                formData.append('quality', qualitySlider.value);
+            }
+            // --- AKHIR BARIS BARU ---
+
             try {
                 const response = await fetch(`${backendUrl}/convert/${type}`, {
                     method: 'POST',
@@ -65,12 +102,15 @@ const backendUrl = 'https://web-all-in-one-converter.vercel.app';
                 if (response.ok && result.success) {
                     statusMessage.textContent = `Konversi ${type} selesai!`;
                     statusMessage.className = 'status-message success';
-
+                    
                     convertedMedia.src = result.downloadUrl;
                     downloadLink.href = result.downloadUrl;
-                    downloadLink.download = `converted_${selectedFile.name}.${outputFormat.value}`;
+                    
+                    // Membuat nama file unduhan yang dinamis
+                    const originalName = selectedFile.name.substring(0, selectedFile.name.lastIndexOf('.'));
+                    downloadLink.download = `${originalName}_converted.${outputFormat.value}`;
+                    
                     downloadArea.style.display = 'block';
-
                 } else {
                     throw new Error(result.message || 'Terjadi kesalahan di server.');
                 }

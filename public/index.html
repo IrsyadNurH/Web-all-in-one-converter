@@ -42,12 +42,13 @@
         </div>
 
         <div id="image-converter" class="converter-section" style="display: none;">
-            <h2>Konverter Gambar</h2>
-            <div class="upload-area">
-                <input type="file" id="imageInput" accept="image/*">
-                <label for="imageInput" class="upload-button">Pilih Gambar</label>
-                <p id="imageFileName">Belum ada gambar dipilih</p>
-            </div>
+        <h2>Konverter Gambar</h2>
+        <div class="upload-area">
+            <input type="file" id="imageInput" accept="image/*">
+            <label for="imageInput" class="upload-button">Pilih Gambar</label>
+            <p id="imageFileName">Belum ada gambar dipilih</p>
+        </div>
+    
             <div class="conversion-options">
                 <label for="imageOutputFormat">Format Output:</label>
                 <select id="imageOutputFormat">
@@ -56,8 +57,16 @@
                     <option value="webp">WebP</option>
                     <option value="bmp">BMP</option>
                 </select>
+                
+                <div id="imageQualityControl" class="quality-control" style="display: none;">
+                    <label for="imageQuality">Kualitas:</label>
+                    <input type="range" id="imageQuality" min="10" max="100" value="80" step="5">
+                    <span id="imageQualityValue">80%</span>
+                </div>
+
                 <button id="convertImageButton" disabled>Konversi Gambar</button>
             </div>
+
             <div id="imageStatusMessage" class="status-message"></div>
             <div id="imageDownloadArea" class="download-area" style="display: none;">
                 <h3>Gambar Hasil Konversi</h3>
