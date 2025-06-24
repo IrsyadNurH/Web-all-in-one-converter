@@ -20,15 +20,30 @@ cloudinary.config({
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Konfigurasi CORS
-app.use(cors({
-    origin: '*', // Untuk pengembangan, bisa diganti dengan URL Netlify spesifik
-}));
 
-// Rute Utama untuk Health Check
+// --- Middleware ---
+
+// =================================================================
+// == KONFIGURASI CORS SPESIFIK DITAMBAHKAN DI SINI ==
+// Konfigurasi CORS untuk memberikan izin secara eksplisit ke frontend Netlify Anda
+const corsOptions = {
+    // URL ini diambil dari pesan error Anda
+    origin: 'https://web-all-in-one-converter.netlify.app',
+    optionsSuccessStatus: 200
+};
+
+// Gunakan middleware cors dengan opsi yang sudah kita tentukan
+app.use(cors(corsOptions));
+// =================================================================
+
+
+// --- Rute Utama untuk Health Check ---
 app.get('/', (req, res) => {
     res.status(200).json({ status: 'ok', message: 'Welcome to the All-in-One Converter API!' });
 });
+
+
+// --- ENDPOINT KONVERSI ---
 
 // Endpoint Gambar
 app.post('/convert/image', upload.single('image'), (req, res) => {
@@ -57,7 +72,7 @@ app.post('/convert/video', upload.single('video'), (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'Tidak ada file video diunggah.' });
 
     const outputFormat = req.body.outputFormat || 'mp4';
-    const videoBitrate = req.body.videoBitrate || '1500k'; // Ambil bitrate dari frontend
+    const videoBitrate = req.body.videoBitrate || '1500k';
 
     const cld_upload_stream = cloudinary.uploader.upload_stream({
             resource_type: "video",
@@ -79,7 +94,7 @@ app.post('/convert/audio', upload.single('audio'), (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'Tidak ada file audio diunggah.' });
 
     const outputFormat = req.body.outputFormat || 'mp3';
-    const audioBitrate = req.body.audioBitrate || '192k'; // Ambil bitrate dari frontend
+    const audioBitrate = req.body.audioBitrate || '192k';
 
     const cld_upload_stream = cloudinary.uploader.upload_stream({
             resource_type: "video",
@@ -96,7 +111,7 @@ app.post('/convert/audio', upload.single('audio'), (req, res) => {
     streamifier.createReadStream(req.file.buffer).pipe(cld_upload_stream);
 });
 
-// Jalankan server jika tidak di Vercel
+// Jalankan server jika tidak di Vercel (untuk pengujian lokal)
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server berjalan di http://localhost:${PORT}`);
