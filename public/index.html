@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Converter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>All-in-One Media Converter</h1>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="video">Video</button>
+            <button class="tab-button" data-tab="image">Image</button>
+            <button class="tab-button" data-tab="audio">Audio</button>
+        </div>
+
+        <div id="video-converter" class="converter-section active">
+            <h2>Konverter Video</h2>
+            <div class="upload-area">
+                <input type="file" id="videoInput" accept="video/*">
+                <label for="videoInput" class="upload-button">Pilih Video</label>
+                <p id="videoFileName">Belum ada video dipilih</p>
+            </div>
+            <div class="conversion-options">
+                <label for="videoOutputFormat">Format Output:</label>
+                <select id="videoOutputFormat">
+                    <option value="mp4">MP4</option>
+                    <option value="webm">WebM</option>
+                    <option value="avi">AVI</option>
+                    <option value="mov">MOV</option>
+                </select>
+                <button id="convertVideoButton" disabled>Konversi Video</button>
+            </div>
+            <div id="videoStatusMessage" class="status-message"></div>
+            <div id="videoDownloadArea" class="download-area" style="display: none;">
+                <h3>Video Hasil Konversi</h3>
+                <video id="convertedVideo" controls></video>
+                <a id="downloadVideoLink" href="#" download="converted_video.mp4">Unduh Video</a>
+            </div>
+        </div>
+
+        <div id="image-converter" class="converter-section" style="display: none;">
+            <h2>Konverter Gambar</h2>
+            <div class="upload-area">
+                <input type="file" id="imageInput" accept="image/*">
+                <label for="imageInput" class="upload-button">Pilih Gambar</label>
+                <p id="imageFileName">Belum ada gambar dipilih</p>
+            </div>
+            <div class="conversion-options">
+                <label for="imageOutputFormat">Format Output:</label>
+                <select id="imageOutputFormat">
+                    <option value="png">PNG</option>
+                    <option value="jpeg">JPEG</option>
+                    <option value="webp">WebP</option>
+                    <option value="bmp">BMP</option>
+                </select>
+                <button id="convertImageButton" disabled>Konversi Gambar</button>
+            </div>
+            <div id="imageStatusMessage" class="status-message"></div>
+            <div id="imageDownloadArea" class="download-area" style="display: none;">
+                <h3>Gambar Hasil Konversi</h3>
+                <img id="convertedImage" alt="Converted Image">
+                <a id="downloadImageLink" href="#" download="converted_image.png">Unduh Gambar</a>
+            </div>
+        </div>
+
+        <div id="audio-converter" class="converter-section" style="display: none;">
+            <h2>Konverter Audio</h2>
+            <div class="upload-area">
+                <input type="file" id="audioInput" accept="audio/*">
+                <label for="audioInput" class="upload-button">Pilih Audio</label>
+                <p id="audioFileName">Belum ada audio dipilih</p>
+            </div>
+            <div class="conversion-options">
+                <label for="audioOutputFormat">Format Output:</label>
+                <select id="audioOutputFormat">
+                    <option value="mp3">MP3</option>
+                    <option value="wav">WAV</option>
+                    <option value="ogg">OGG</option>
+                    <option value="aac">AAC</option>
+                </select>
+                <button id="convertAudioButton" disabled>Konversi Audio</button>
+            </div>
+            <div id="audioStatusMessage" class="status-message"></div>
+            <div id="audioDownloadArea" class="download-area" style="display: none;">
+                <h3>Audio Hasil Konversi</h3>
+                <audio id="convertedAudio" controls></audio>
+                <a id="downloadAudioLink" href="#" download="converted_audio.mp3">Unduh Audio</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
