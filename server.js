@@ -24,26 +24,43 @@ const upload = multer({ storage: storage });
 // --- Middleware ---
 
 // =================================================================
-// == KONFIGURASI CORS SPESIFIK DITAMBAHKAN DI SINI ==
-// Konfigurasi CORS untuk memberikan izin secara eksplisit ke frontend Netlify Anda
+// == PERBAIKAN CORS DENGAN WHITELIST ==
+
+// Daftar semua URL frontend yang diizinkan untuk mengakses backend ini
+const whitelist = [
+    'https://web-all-in-one-converter.netlify.app', // URL Produksi Utama Anda
+    'https://685a8f41bf93d986bfd903cd--web-all-in-one-converter.netlify.app', // URL Preview lama (untuk jaga-jaga)
+    'http://localhost:3000', // Untuk pengujian di komputer lokal
+    'http://127.0.0.1:5500' // Jika Anda menggunakan Live Server di VS Code
+];
+
 const corsOptions = {
-    // URL ini diambil dari pesan error Anda
-    origin: 'https://web-all-in-one-converter.netlify.app',
-    optionsSuccessStatus: 200
+  origin: function (origin, callback) {
+    // Izinkan jika origin ada di dalam whitelist, atau jika origin tidak ada (misalnya saat tes dengan Postman)
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  optionsSuccessStatus: 200
 };
 
-// Gunakan middleware cors dengan opsi yang sudah kita tentukan
+// Gunakan middleware cors dengan opsi whitelist yang sudah kita tentukan
 app.use(cors(corsOptions));
 // =================================================================
 
 
 // --- Rute Utama untuk Health Check ---
 app.get('/', (req, res) => {
-    res.status(200).json({ status: 'ok', message: 'Welcome to the All-in-One Converter API!' });
+    res.status(200).json({ 
+        status: 'ok', 
+        message: 'Welcome to the All-in-One Converter API!' 
+    });
 });
 
 
-// --- ENDPOINT KONVERSI ---
+// --- ENDPOINT KONVERSI (Kode ini tidak perlu diubah) ---
 
 // Endpoint Gambar
 app.post('/convert/image', upload.single('image'), (req, res) => {
@@ -111,7 +128,7 @@ app.post('/convert/audio', upload.single('audio'), (req, res) => {
     streamifier.createReadStream(req.file.buffer).pipe(cld_upload_stream);
 });
 
-// Jalankan server jika tidak di Vercel (untuk pengujian lokal)
+// Jalankan server jika tidak di Vercel
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server berjalan di http://localhost:${PORT}`);
