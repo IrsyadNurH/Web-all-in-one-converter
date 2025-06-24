@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // URL backend yang akan di-deploy di Render
     // GANTI DENGAN URL ANDA SENDIRI DI LANGKAH TERAKHIR
-    const backendUrl = 'https://NAMA-APP-ANDA.onrender.com'; 
-
+const backendUrl = 'https://web-all-in-one-converter.vercel.app';
     const tabButtons = document.querySelectorAll('.tab-button');
     const converterSections = document.querySelectorAll('.converter-section');
 
