@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Pastikan URL ini sudah benar menunjuk ke backend Render Anda
-    const backendUrl = 'https://web-all-in-one-converter.vercel.app'; // Ganti xxxx dengan ID Render Anda
+    // Pastikan URL ini sudah benar menunjuk ke backend Vercel/Render Anda
+    const backendUrl = 'https://web-all-in-one-converter.vercel.app'; 
 
     const tabButtons = document.querySelectorAll('.tab-button');
     const converterSections = document.querySelectorAll('.converter-section');
@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => switchTab(button.dataset.tab));
     });
 
-    // Fungsi setup yang telah diperbarui untuk semua konverter
     function setupConverter(type) {
         const input = document.getElementById(`${type}Input`);
         const fileName = document.getElementById(`${type}FileName`);
@@ -29,13 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let selectedFile = null;
 
-        // --- BAGIAN BARU: Logika spesifik untuk quality slider gambar ---
         if (type === 'image') {
             const qualityControl = document.getElementById('imageQualityControl');
             const qualitySlider = document.getElementById('imageQuality');
             const qualityValue = document.getElementById('imageQualityValue');
 
-            // Fungsi untuk menampilkan/menyembunyikan slider
             const toggleQualityControl = () => {
                 const format = outputFormat.value;
                 if (format === 'jpeg' || format === 'webp') {
@@ -45,19 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
             
-            // Tambahkan event listener untuk select format
             outputFormat.addEventListener('change', toggleQualityControl);
-            
-            // Tambahkan event listener untuk slider
             qualitySlider.addEventListener('input', () => {
                 qualityValue.textContent = `${qualitySlider.value}%`;
             });
-
-            // Panggil sekali saat inisialisasi untuk mengatur tampilan awal
             toggleQualityControl();
         }
-        // --- AKHIR BAGIAN BARU ---
-
 
         input.addEventListener('change', (event) => {
             selectedFile = event.target.files.length > 0 ? event.target.files[0] : null;
@@ -74,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // UI feedback
             convertButton.disabled = true;
             statusMessage.textContent = `Mengunggah dan mengonversi "${selectedFile.name}"... Ini mungkin butuh waktu.`;
             statusMessage.className = 'status-message';
@@ -84,32 +73,31 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append(type, selectedFile);
             formData.append('outputFormat', outputFormat.value);
 
-            // --- BARIS BARU: Menambahkan data kualitas ke FormData jika tipenya gambar ---
+            // Menambahkan data kualitas/bitrate ke FormData
             if (type === 'image') {
                 const qualitySlider = document.getElementById('imageQuality');
                 formData.append('quality', qualitySlider.value);
+            } else if (type === 'video') {
+                const videoBitrate = document.getElementById('videoBitrate');
+                formData.append('videoBitrate', videoBitrate.value);
+            } else if (type === 'audio') {
+                const audioBitrate = document.getElementById('audioBitrate');
+                formData.append('audioBitrate', audioBitrate.value);
             }
-            // --- AKHIR BARIS BARU ---
 
             try {
                 const response = await fetch(`${backendUrl}/convert/${type}`, {
                     method: 'POST',
                     body: formData,
                 });
-
                 const result = await response.json();
-
                 if (response.ok && result.success) {
                     statusMessage.textContent = `Konversi ${type} selesai!`;
                     statusMessage.className = 'status-message success';
-                    
                     convertedMedia.src = result.downloadUrl;
                     downloadLink.href = result.downloadUrl;
-                    
-                    // Membuat nama file unduhan yang dinamis
                     const originalName = selectedFile.name.substring(0, selectedFile.name.lastIndexOf('.'));
                     downloadLink.download = `${originalName}_converted.${outputFormat.value}`;
-                    
                     downloadArea.style.display = 'block';
                 } else {
                     throw new Error(result.message || 'Terjadi kesalahan di server.');
@@ -119,15 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusMessage.textContent = `Gagal: ${error.message}`;
                 statusMessage.className = 'status-message';
             } finally {
-                // Re-enable button
                 convertButton.disabled = false;
             }
         });
     }
 
-    // Initialize all converters
     ['video', 'image', 'audio'].forEach(setupConverter);
-
-    // Initial state
     switchTab('video');
 });

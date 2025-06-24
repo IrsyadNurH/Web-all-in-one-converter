@@ -16,6 +16,7 @@
             <button class="tab-button" data-tab="audio">Audio</button>
         </div>
 
+        <!-- Bagian Konverter Video dengan Kontrol Bitrate -->
         <div id="video-converter" class="converter-section active">
             <h2>Konverter Video</h2>
             <div class="upload-area">
@@ -31,24 +32,33 @@
                     <option value="avi">AVI</option>
                     <option value="mov">MOV</option>
                 </select>
+                <!-- KONTROL KUALITAS VIDEO BARU -->
+                <div class="quality-control">
+                    <label for="videoBitrate">Kualitas Video:</label>
+                    <select id="videoBitrate">
+                        <option value="2500k">Tinggi (2500k)</option>
+                        <option value="1500k" selected>Sedang (1500k)</option>
+                        <option value="750k">Rendah (750k)</option>
+                    </select>
+                </div>
                 <button id="convertVideoButton" disabled>Konversi Video</button>
             </div>
             <div id="videoStatusMessage" class="status-message"></div>
             <div id="videoDownloadArea" class="download-area" style="display: none;">
                 <h3>Video Hasil Konversi</h3>
                 <video id="convertedVideo" controls></video>
-                <a id="downloadVideoLink" href="#" download="converted_video.mp4">Unduh Video</a>
+                <a id="downloadVideoLink" href="#" download>Unduh Video</a>
             </div>
         </div>
 
+        <!-- Bagian Konverter Gambar dengan Kontrol Kualitas -->
         <div id="image-converter" class="converter-section" style="display: none;">
-        <h2>Konverter Gambar</h2>
-        <div class="upload-area">
-            <input type="file" id="imageInput" accept="image/*">
-            <label for="imageInput" class="upload-button">Pilih Gambar</label>
-            <p id="imageFileName">Belum ada gambar dipilih</p>
-        </div>
-    
+            <h2>Konverter Gambar</h2>
+            <div class="upload-area">
+                <input type="file" id="imageInput" accept="image/*">
+                <label for="imageInput" class="upload-button">Pilih Gambar</label>
+                <p id="imageFileName">Belum ada gambar dipilih</p>
+            </div>
             <div class="conversion-options">
                 <label for="imageOutputFormat">Format Output:</label>
                 <select id="imageOutputFormat">
@@ -57,24 +67,22 @@
                     <option value="webp">WebP</option>
                     <option value="bmp">BMP</option>
                 </select>
-                
                 <div id="imageQualityControl" class="quality-control" style="display: none;">
-                    <label for="imageQuality">Kualitas:</label>
+                    <label for="imageQuality">Kualitas Gambar:</label>
                     <input type="range" id="imageQuality" min="10" max="100" value="80" step="5">
                     <span id="imageQualityValue">80%</span>
                 </div>
-
                 <button id="convertImageButton" disabled>Konversi Gambar</button>
             </div>
-
             <div id="imageStatusMessage" class="status-message"></div>
             <div id="imageDownloadArea" class="download-area" style="display: none;">
                 <h3>Gambar Hasil Konversi</h3>
                 <img id="convertedImage" alt="Converted Image">
-                <a id="downloadImageLink" href="#" download="converted_image.png">Unduh Gambar</a>
+                <a id="downloadImageLink" href="#" download>Unduh Gambar</a>
             </div>
         </div>
 
+        <!-- Bagian Konverter Audio dengan Kontrol Bitrate -->
         <div id="audio-converter" class="converter-section" style="display: none;">
             <h2>Konverter Audio</h2>
             <div class="upload-area">
@@ -90,13 +98,22 @@
                     <option value="ogg">OGG</option>
                     <option value="aac">AAC</option>
                 </select>
+                <!-- KONTROL KUALITAS AUDIO BARU -->
+                <div class="quality-control">
+                    <label for="audioBitrate">Kualitas Audio:</label>
+                    <select id="audioBitrate">
+                        <option value="256k">Tinggi (256k)</option>
+                        <option value="192k" selected>Sedang (192k)</option>
+                        <option value="128k">Rendah (128k)</option>
+                    </select>
+                </div>
                 <button id="convertAudioButton" disabled>Konversi Audio</button>
             </div>
             <div id="audioStatusMessage" class="status-message"></div>
             <div id="audioDownloadArea" class="download-area" style="display: none;">
                 <h3>Audio Hasil Konversi</h3>
                 <audio id="convertedAudio" controls></audio>
-                <a id="downloadAudioLink" href="#" download="converted_audio.mp3">Unduh Audio</a>
+                <a id="downloadAudioLink" href="#" download>Unduh Audio</a>
             </div>
         </div>
     </div>
