@@ -93,6 +93,13 @@ app.post('/convert/audio', upload.single('audio'), (req, res) => {
     res.status(512).json({ success: false, message: 'Konversi Audio tidak didukung pada platform hosting ini karena FFMPEG tidak tersedia.' });
 });
 
+app.get('/', (req, res) => {
+    res.status(200).json({ 
+        status: 'ok', 
+        message: 'Welcome to the All-in-One Converter API!' 
+    });
+});
+
 // Jalankan server jika tidak di Vercel (untuk pengujian lokal)
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
