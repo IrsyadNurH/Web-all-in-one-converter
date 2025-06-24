@@ -30,16 +30,16 @@ const upload = multer({ storage: storage });
 
 // Daftar semua URL frontend yang diizinkan untuk mengakses backend ini
 const whitelist = [
-    'https://web-all-in-one-converter.netlify.app', // URL Produksi Utama Anda
-    'http://localhost:3000', // Untuk pengujian backend di komputer lokal
-    'http://127.0.0.1:5500'  // Jika Anda menggunakan Live Server VS Code untuk frontend lokal
+    'https://web-all-in-one-converter.netlify.app', // URL Produksi Utama Anda
+    'http://localhost:3000', // Untuk pengujian backend di komputer lokal
+    'http://127.0.0.1:5500'  // Jika Anda menggunakan Live Server VS Code untuk frontend lokal
 ];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Izinkan jika origin ada di dalam whitelist, atau jika origin tidak ada (misalnya saat tes dengan Postman/Insomnia)
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
+ origin: function (origin, callback) {
+  // Izinkan jika origin ada di dalam whitelist, atau jika origin tidak ada (misalnya saat tes dengan Postman/Insomnia)
+ if (whitelist.indexOf(origin) !== -1 || !origin) {
+ callback(null, true);
     } else {
       callback(new Error('Akses ditolak oleh kebijakan CORS'));
     }

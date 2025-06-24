@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- KONFIGURASI PENTING ---
     // Pastikan URL ini sudah benar menunjuk ke backend Vercel Anda.
-    const backendUrl = 'https://web-all-in-one-converter-git-main-irs-projects-b9f679f3.vercel.app/';
+    const backendUrl = 'https://web-all-in-one-converter-git-main-irs-projects-b9f679f3.vercel.app';
 
     // Ambil semua elemen tab dan section converter
     const tabButtons = document.querySelectorAll('.tab-button');
