@@ -14,6 +14,8 @@
             <button class="tab-button active" data-tab="video">Video</button>
             <button class="tab-button" data-tab="image">Image</button>
             <button class="tab-button" data-tab="audio">Audio</button>
+            <button class="tab-button" data-tab="steganography">Steganografi Gambar</button>
+
         </div>
 
         <!-- Bagian Konverter Video dengan Kontrol Bitrate -->
@@ -116,8 +118,65 @@
                 <a id="downloadAudioLink" href="#" download>Unduh Audio</a>
             </div>
         </div>
-    </div>
 
+        <!-- Panel Steganografi Baru -->
+        <div id="steganography-converter" class="converter-section">
+            <h2>Steganografi Gambar (LSB)</h2>
+            <p>Sembunyikan pesan rahasia di dalam gambar, atau tampilkan pesan dari gambar.</p>
+            
+            <!-- Pilihan Mode: Sembunyikan atau Tampilkan -->
+            <div class="steg-mode-selector">
+                <label>
+                    <input type="radio" name="stegMode" value="encode" checked>
+                    Sembunyikan Pesan
+                </label>
+                <label>
+                    <input type="radio" name="stegMode" value="decode">
+                    Tampilkan Pesan
+                </label>
+            </div>
+
+            <!-- Bagian untuk Menyembunyikan Pesan (Encode) -->
+            <div class="steg-section" id="steg-encode-section">
+                <div class="upload-area">
+                    <label for="stegEncodeInput" class="upload-label">Pilih Gambar Sampul (Cover)</label>
+                    <input type="file" id="stegEncodeInput" accept="image/png, image/jpeg, image/bmp">
+                    <span id="stegEncodeFileName" class="file-name">Belum ada gambar dipilih</span>
+                </div>
+
+                <div class="options-group">
+                    <label for="stegSecretMessage">Pesan Rahasia</label>
+                    <textarea id="stegSecretMessage" placeholder="Ketik pesan rahasia Anda di sini..."></textarea>
+                </div>
+
+                <button id="encodeStegButton" class="convert-button" disabled>Sembunyikan Pesan</button>
+                <div id="stegEncodeStatusMessage" class="status-message"></div>
+                
+                <div id="stegEncodeDownloadArea" class="download-area">
+                    <h3>Gambar Hasil (Stego-Image):</h3>
+                    <img id="encodedStegImage" class="preview-media" alt="Gambar hasil enkripsi">
+                    <a id="downloadStegEncodeLink" class="download-button" download>Unduh Gambar Hasil (.png)</a>
+                </div>
+            </div>
+
+            <!-- Bagian untuk Menampilkan Pesan (Decode) -->
+            <div class="steg-section" id="steg-decode-section" style="display: none;">
+                <div class="upload-area">
+                    <label for="stegDecodeInput" class="upload-label">Pilih Gambar (Stego-Image)</label>
+                    <input type="file" id="stegDecodeInput" accept="image/png">
+                    <span id="stegDecodeFileName" class="file-name">Belum ada gambar dipilih</span>
+                </div>
+
+                <button id="decodeStegButton" class="convert-button" disabled>Tampilkan Pesan</button>
+                <div id="stegDecodeStatusMessage" class="status-message"></div>
+
+                <div id="stegDecodeResultArea" class="download-area">
+                    <h3>Pesan yang Ditemukan:</h3>
+                    <p id="decodedMessage" class="decoded-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
