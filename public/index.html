@@ -139,8 +139,8 @@
             <!-- Bagian untuk Menyembunyikan Pesan (Encode) -->
             <div class="steg-section" id="steg-encode-section">
                 <div class="upload-area">
-                    <label for="stegEncodeInput" class="upload-label">Pilih Gambar Sampul (Cover)</label>
-                    <input type="file" id="stegEncodeInput" accept="image/png, image/jpeg, image/bmp">
+                    <label for="stegEncodeInput" class="upload-label upload-button">Pilih Gambar Sampul (Cover)</label>
+                    <input type="file" id="stegEncodeInput" accept="image/png, image/jpeg, image/bmp" style="display: none;">
                     <span id="stegEncodeFileName" class="file-name">Belum ada gambar dipilih</span>
                 </div>
 
@@ -172,8 +172,8 @@
             <!-- Bagian untuk Menampilkan Pesan (Decode) -->
             <div class="steg-section" id="steg-decode-section" style="display: none;">
                 <div class="upload-area">
-                    <label for="stegDecodeInput" class="upload-label">Pilih Gambar (Stego-Image)</label>
-                    <input type="file" id="stegDecodeInput" accept="image/png">
+                    <label for="stegDecodeInput" class="upload-label upload-button">Pilih Gambar (Stego-Image)</label>
+                    <input type="file" id="stegDecodeInput" accept="image/png" style="display: none;">
                     <span id="stegDecodeFileName" class="file-name">Belum ada gambar dipilih</span>
                 </div>
 
