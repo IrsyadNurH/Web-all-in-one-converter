@@ -156,6 +156,16 @@
                     <h3>Gambar Hasil (Stego-Image):</h3>
                     <img id="encodedStegImage" class="preview-media" alt="Gambar hasil enkripsi">
                     <a id="downloadStegEncodeLink" class="download-button" download>Unduh Gambar Hasil (.png)</a>
+                    
+                    <!-- === TAMBAHAN BARU DI SINI === -->
+                    <button id="visualizeDiffButton" class="convert-button secondary">Lihat Perbedaan (Visualisasi LSB)</button>
+                    
+                    <div id="stegVisualizeArea" style="display: none; margin-top: 1rem;">
+                        <h4>Visualisasi Perbedaan LSB:</h4>
+                        <p style="font-size: 0.9em; color: #555;">(Piksel putih menunjukkan adanya bit pesan yang disisipkan)</p>
+                        <canvas id="diffCanvas" class="preview-media" style="background-color: #000;"></canvas>
+                    </div>
+                    <!-- === AKHIR TAMBAHAN === -->
                 </div>
             </div>
 

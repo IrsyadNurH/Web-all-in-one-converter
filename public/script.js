@@ -158,6 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const decodedMessageText = document.getElementById('decodedMessage');
         let decodeFile = null;
 
+        // --- Tambahan Baru: Elemen untuk Visualisasi ---
+        const visualizeButton = document.getElementById('visualizeDiffButton');
+        const visualizeArea = document.getElementById('stegVisualizeArea');
+        const diffCanvas = document.getElementById('diffCanvas');
+        const diffCtx = diffCanvas.getContext('2d');
+        let originalImageData = null; // Kita akan simpan data gambar asli di sini
+
         // Fungsi untuk beralih antara mode Encode dan Decode
         stegModeRadios.forEach(radio => {
             radio.addEventListener('change', (event) => {
@@ -222,6 +229,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     canvas.height = img.height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0);
+
+                    // === TAMBAHAN: Simpan data gambar asli SEBELUM dimodifikasi ===
+                    originalImageData = ctx.getImageData(0, 0, img.width, img.height);
+                    // =============================================================
 
                     // Pesan diubah menjadi biner + delimiter untuk menandai akhir pesan
                     const message = secretMessageInput.value;
@@ -319,6 +330,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.src = event.target.result;
             };
             reader.readAsDataURL(decodeFile);
+        });
+
+        // === TAMBAHAN BARU: Event listener untuk tombol visualisasi ===
+        visualizeButton.addEventListener('click', () => {
+            if (!originalImageData) {
+                alert('Silakan lakukan proses "Sembunyikan Pesan" terlebih dahulu.');
+                return;
+            }
+
+            // Ambil data gambar yang sudah dimodifikasi dari canvas preview
+            const encodedImgElement = document.getElementById('encodedStegImage');
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = encodedImgElement.naturalWidth;
+            tempCanvas.height = encodedImgElement.naturalHeight;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(encodedImgElement, 0, 0);
+            const encodedImageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+
+            // Siapkan canvas untuk peta perbedaan
+            diffCanvas.width = originalImageData.width;
+            diffCanvas.height = originalImageData.height;
+
+            const diffImageData = diffCtx.createImageData(diffCanvas.width, diffCanvas.height);
+
+            const originalData = originalImageData.data;
+            const encodedData = encodedImageData.data;
+            const diffData = diffImageData.data;
+
+            // Bandingkan setiap piksel
+            for (let i = 0; i < originalData.length; i += 4) {
+                const rOriginal = originalData[i] & 1;
+                const gOriginal = originalData[i + 1] & 1;
+                const bOriginal = originalData[i + 2] & 1;
+
+                const rEncoded = encodedData[i] & 1;
+                const gEncoded = encodedData[i + 1] & 1;
+                const bEncoded = encodedData[i + 2] & 1;
+
+                // Jika ada perbedaan di salah satu channel, buat piksel putih
+                if (rOriginal !== rEncoded || gOriginal !== gEncoded || bOriginal !== bEncoded) {
+                    diffData[i] = 255;      // R
+                    diffData[i + 1] = 255;  // G
+                    diffData[i + 2] = 255;  // B
+                } else {
+                    diffData[i] = 0;        // R
+                    diffData[i + 1] = 0;    // G
+                    diffData[i + 2] = 0;    // B
+                }
+                diffData[i + 3] = 255; // Alpha (selalu opaque)
+            }
+
+            diffCtx.putImageData(diffImageData, 0, 0);
+            visualizeArea.style.display = 'block';
         });
 
         // Fungsi pembantu untuk mengubah teks ke biner
